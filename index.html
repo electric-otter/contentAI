@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khoj.dev API with Infinite Scrolling</title>
+    <title>Khoj API with Infinite Scrolling</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,7 +22,7 @@
 </head>
 <body>
 
-    <h1>Khoj.dev API with Infinite Scrolling</h1>
+    <h1>Khoj API with Infinite Scrolling</h1>
     <input type="text" id="apiKeyInput" placeholder="Enter your API key here">
     <input type="text" id="promptInput" placeholder="Enter your prompt here">
     <button onclick="generateContent()">Generate</button>
@@ -46,10 +46,10 @@
                 });
                 const data = await response.json();
                 const contentDiv = document.getElementById('content');
-                data.forEach(item => {
+                data.results.forEach(item => {
                     const div = document.createElement('div');
                     div.className = 'item';
-                    div.innerText = item; 
+                    div.innerText = item.text; 
                     contentDiv.appendChild(div);
                 });
             } catch (error) {
