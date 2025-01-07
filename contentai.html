@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khoj API with Infinite Scrolling</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #content {
+            margin-top: 20px;
+        }
+        .item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Khoj API with Infinite Scrolling</h1>
+    <input type="text" id="apiKeyInput" placeholder="Enter your API key here">
+    <input type="text" id="promptInput" placeholder="Enter your prompt here">
+    <button onclick="generateContent()">Generate</button>
+
+    <div id="content"></div>
+
+    <script>
+        let page = 1;
+        let prompt = '';
+        let apiKey = '';
+
+        async function fetchContent() {
+            try {
+                const response = await fetch('https://api.khoj.com/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({ prompt, page })
+                });
+                const data = await response.json();
+                const contentDiv = document.getElementById('content');
+                data.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'item';
+                    div.innerText = item; 
+                    contentDiv.appendChild(div);
+                });
+            } catch (error) {
+                console.error('Error fetching content:', error);
+            }
+        }
+
+        function generateContent() {
+            document.getElementById('content').innerHTML = '';
+            apiKey = document.getElementById('apiKeyInput').value;
+            prompt = document.getElementById('promptInput').value;
+            page = 1;
+            fetchContent();
+        }
+
+        window.onscroll = () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                page++;
+                fetchContent();
+            }
+        };
+    </script>
+</body>
+</html>
